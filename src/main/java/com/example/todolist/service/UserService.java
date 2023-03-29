@@ -6,6 +6,8 @@ import com.example.todolist.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService {
     @Autowired
@@ -19,7 +21,7 @@ public class UserService {
         userDAO.registerUser(registerDTO);
     }
 
-    public User getByEmail(String email){
+    public List<User> getByEmail(String email){
         return userDAO.getByEmail(email);
     }
     public User getById(Long id){

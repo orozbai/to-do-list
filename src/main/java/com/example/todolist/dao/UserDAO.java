@@ -2,10 +2,13 @@ package com.example.todolist.dao;
 
 import com.example.todolist.dto.RegisterDTO;
 import com.example.todolist.entity.User;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class UserDAO extends BaseDAO {
@@ -17,9 +20,9 @@ public class UserDAO extends BaseDAO {
         String sql = "SELECT * FROM users WHERE email LIKE '" + email + "'";
         return jdbcTemplate.queryForObject(sql, String.class);
     }
-    public User getByEmail(String email) {
+    public List<User> getByEmail(String email) {
         String sql = "SELECT * FROM users WHERE email LIKE '" + email + "'";
-        return jdbcTemplate.queryForObject(sql, User.class);
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class));
     }
     public User getById(Long id) {
         String sql = "SELECT * FROM users WHERE id =" + id;
