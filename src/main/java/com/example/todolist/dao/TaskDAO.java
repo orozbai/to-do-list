@@ -57,24 +57,16 @@ public class TaskDAO extends BaseDAO {
 
     public String updateTask(Long taskId, Long currentUserId) {
         try {
-//            if (taskDetailed(taskId, currentUserId).get(0).getStatus().equals("new")) {
-//                String sql = "UPDATE tasks SET status = ? WHERE id = ? and whosetask = ?";
-//                jdbcTemplate.update(sql, "working", taskId, currentUserId);
-//            } else if (taskDetailed(taskId, currentUserId).get(0).getStatus().equals("working")) {
-//                String sql = "UPDATE tasks SET status = ? WHERE id = ? and whosetask = ?";
-//                jdbcTemplate.update(sql, "end", taskId, currentUserId);
-//            } else {
-//                String sql = "UPDATE tasks SET status = ? WHERE id = ? and whosetask = ?";
-//                jdbcTemplate.update(sql, "end", taskId, currentUserId);
-//            }
-            String sql = "UPDATE tasks SET status = ? WHERE id = ? and whosetask = ?";
-            jdbcTemplate.update(con -> {
-                PreparedStatement ps = con.prepareStatement(sql);
-                ps.setString(1, "working");
-                ps.setLong(2, taskId);
-                ps.setLong(3, currentUserId);
-                return ps;
-            });
+            if (taskDetailed(taskId, currentUserId).get(0).getStatus().equals("new")) {
+                String sql = "UPDATE tasks SET status = ? WHERE id ='"+ taskId +"' and whosetask = '" + currentUserId +"'";
+                jdbcTemplate.update(sql, "working");
+            } else if (taskDetailed(taskId, currentUserId).get(0).getStatus().equals("working")) {
+                String sql = "UPDATE tasks SET status = ? WHERE id ='"+ taskId +"' and whosetask = '" + currentUserId +"'";
+                jdbcTemplate.update(sql, "end");
+            } else {
+                String sql = "UPDATE tasks SET status = ? WHERE id ='"+ taskId +"' and whosetask = '" + currentUserId +"'";
+                jdbcTemplate.update(sql, "end");
+            }
             return "UPDATED";
         } catch (Exception e) {
             return "INCORRECT ID TASK";
