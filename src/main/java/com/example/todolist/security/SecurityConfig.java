@@ -36,12 +36,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/login").permitAll()
-                .antMatchers("/reg").permitAll()
-                .antMatchers("/posts/all").permitAll()
+                .antMatchers("/register").permitAll()
                 .anyRequest().authenticated()
                 .and().formLogin()
-                .defaultSuccessUrl("/fyp/" + SecurityConfig.getCurrentUserEmail(), true)
-                .successHandler(new SimpleUrlAuthenticationSuccessHandler("/fyp/" + SecurityConfig.getCurrentUserEmail()))
                 .and()
                 .logout()
                 .logoutUrl("/logout")
