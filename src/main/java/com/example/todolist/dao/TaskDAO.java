@@ -37,7 +37,7 @@ public class TaskDAO extends BaseDAO {
     }
 
     public List<TaskListDTO> showTaskList(Long userId) {
-        String sql = "SELECT * FROM tasks WHERE whoseTask LIKE '" + userId + "'";
+        String sql = "SELECT * FROM tasks WHERE whoseTask = '" + userId + "'";
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(TaskListDTO.class));
     }
 

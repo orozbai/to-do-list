@@ -2,6 +2,7 @@ package com.example.todolist.dao;
 
 import com.example.todolist.dto.RegisterDTO;
 import com.example.todolist.entity.User;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -18,16 +19,18 @@ public class UserDAO extends BaseDAO {
 
     public String getEmail(String email) {
         String sql = "SELECT * FROM users WHERE email LIKE '" + email + "'";
-        return jdbcTemplate.queryForObject(sql, String.class);
+        try {
+            return jdbcTemplate.queryForObject(sql, String.class);
+        } catch (EmptyResultDataAccessException e) {
+            return "";
+        }
     }
+
     public List<User> getByEmail(String email) {
         String sql = "SELECT * FROM users WHERE email LIKE '" + email + "'";
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class));
     }
-    public User getById(Long id) {
-        String sql = "SELECT * FROM users WHERE id =" + id;
-        return jdbcTemplate.queryForObject(sql, User.class);
-    }
+
     public boolean existsByEmail(String email) {
         return getEmail(email).contains(email);
     }

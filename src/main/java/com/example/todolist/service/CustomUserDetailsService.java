@@ -22,12 +22,4 @@ public class CustomUserDetailsService implements UserDetailsService {
         }
         return new CustomUserDetails(user);
     }
-    public UserDetails loadUserById(Long id) throws UsernameNotFoundException {
-        User user = null;
-        user = userService.getById(id);
-        if (user == null) {
-            throw new UsernameNotFoundException("User not found");
-        }
-        return new CustomUserDetails(user);
-    }
 }
