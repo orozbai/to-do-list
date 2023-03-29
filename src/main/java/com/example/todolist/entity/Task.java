@@ -9,7 +9,7 @@ public class Task {
     private Integer id;
     private String header;
     private String description;
-    private Date toDoDate;
+    private Date taskDate;
     private Integer whoseTask;
     private String status;
 }
