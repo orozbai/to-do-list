@@ -4,6 +4,7 @@ import com.example.todolist.dto.RegisterDTO;
 import com.example.todolist.entity.User;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -36,10 +37,11 @@ public class UserDAO extends BaseDAO {
                 "email TEXT NOT NULL," +
                 "password TEXT NOT NULL);");
 
-        jdbcTemplate.execute("INSERT INTO users (username, email, password) " +
-                "VALUES " +
-                "('admin', 'admin@gmail.com', 'admin')," +
-                "('guest', 'guest@gmail.com', 'guest');");
+        jdbcTemplate.execute("INSERT INTO users (username, email, password)\n" +
+                "VALUES ('admin', 'admin@gmail.com', '"
+                + new BCryptPasswordEncoder().encode("admin") + "')," +
+                "('quest', 'quest@gmail.com', '"
+                + new BCryptPasswordEncoder().encode("quest") + "');");
     }
 
 
@@ -47,6 +49,6 @@ public class UserDAO extends BaseDAO {
         jdbcTemplate.execute("INSERT INTO users (username, email, password) \n" +
                 "VALUES \n" +
                 "('" + registerDTO.getUsername() + "', '" + registerDTO.getEmail() + "'," +
-                " '" + registerDTO.getPassword() + "');");
+                " '" + new BCryptPasswordEncoder().encode(registerDTO.getPassword()) + "');");
     }
 }

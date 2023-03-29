@@ -20,7 +20,6 @@ public class TaskController {
 
     @GetMapping("/list")
     public List<TaskListDTO> showTaskList() {
-
         return taskService.showTaskList(SecurityConfig.getCurrentUserId());
     }
 
