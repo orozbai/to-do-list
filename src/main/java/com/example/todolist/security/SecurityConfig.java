@@ -35,9 +35,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/login").permitAll()
-                .antMatchers("/register").permitAll()
-                .anyRequest().authenticated()
+                .antMatchers("/task/**")
+                .fullyAuthenticated()
+                .anyRequest()
+                .permitAll()
                 .and().formLogin()
                 .and()
                 .logout()
@@ -46,14 +47,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .clearAuthentication(true)
                 .deleteCookies("JSESSIONID")
                 .and().userDetailsService(userDetailsService);
-
-        http.authorizeRequests()
-                .antMatchers("/task/**")
-                .fullyAuthenticated();
-
-        http.authorizeRequests()
-                .anyRequest()
-                .permitAll();
 
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.httpBasic();
