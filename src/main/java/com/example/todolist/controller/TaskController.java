@@ -2,6 +2,7 @@ package com.example.todolist.controller;
 
 import com.example.todolist.dto.TaskCreateDTO;
 import com.example.todolist.dto.TaskListDTO;
+import com.example.todolist.entity.Task;
 import com.example.todolist.security.SecurityConfig;
 import com.example.todolist.service.TaskService;
 import lombok.RequiredArgsConstructor;
@@ -26,5 +27,13 @@ public class TaskController {
     @PostMapping("/create")
     public TaskCreateDTO createTask(@RequestBody TaskCreateDTO taskCreateDTO) {
         return taskService.createTask(taskCreateDTO, SecurityConfig.getCurrentUserId());
+    }
+    @RequestMapping("/{id}")
+    public Task taskDetails(@PathVariable Long id) {
+        return taskService.taskDetailed(id);
+    }
+    @RequestMapping("/update/{id}")
+    public String createTask(@PathVariable Long id, @RequestParam String status) {
+        return taskService.updateTask(id, status);
     }
 }

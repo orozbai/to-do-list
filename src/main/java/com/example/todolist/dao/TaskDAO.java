@@ -15,7 +15,10 @@ public class TaskDAO extends BaseDAO {
     public TaskDAO(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         super(jdbcTemplate, namedParameterJdbcTemplate);
     }
-
+    public Task taskDetailed(Long taskId) {
+        String sql = "SELECT * FROM tasks WHERE id = " + taskId;
+        return jdbcTemplate.queryForObject(sql, Task.class);
+    }
     @Override
     public void createTable() {
         jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS tasks (" +
@@ -40,6 +43,12 @@ public class TaskDAO extends BaseDAO {
         String sql = "SELECT * FROM tasks WHERE whoseTask = '" + userId + "'";
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(TaskListDTO.class));
     }
+    public String updateTask(Long taskId, String status) {
+        String sql = "UPDATE tasks SET status = ? WHERE id = ?";
+        jdbcTemplate.update(sql, status, taskId);
+        return "UPDATED";
+    }
+
 
     public void createTask(Task task, Long userId) {
         String sql = "INSERT INTO tasks (header, description, taskDate, whoseTask, status)" +
