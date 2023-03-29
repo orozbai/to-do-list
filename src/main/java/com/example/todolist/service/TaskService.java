@@ -18,7 +18,7 @@ public class TaskService {
         return taskDAO.showTaskList(userId);
     }
 
-    public TaskCreateDTO createTask(TaskCreateDTO taskCreateDTO, int userId) {
+    public TaskCreateDTO createTask(TaskCreateDTO taskCreateDTO, Long userId) {
         var task = Task.builder()
                 .header(taskCreateDTO.getHeader())
                 .description(taskCreateDTO.getDescription())

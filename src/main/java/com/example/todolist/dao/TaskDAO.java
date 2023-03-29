@@ -41,7 +41,7 @@ public class TaskDAO extends BaseDAO {
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(TaskListDTO.class));
     }
 
-    public void createTask(Task task, int userId) {
+    public void createTask(Task task, Long userId) {
         String sql = "INSERT INTO tasks (header, description, taskDate, whoseTask, status)" +
                 "values (?,?,?,?,?)";
         jdbcTemplate.update(con -> {
@@ -49,7 +49,7 @@ public class TaskDAO extends BaseDAO {
             ps.setString(1, task.getHeader());
             ps.setString(2, task.getDescription());
             ps.setDate(3, task.getTaskDate());
-            ps.setInt(4, userId);
+            ps.setLong(4, userId);
             ps.setString(5, "new");
             return ps;
         });

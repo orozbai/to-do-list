@@ -2,6 +2,7 @@ package com.example.todolist.service;
 
 import com.example.todolist.dao.UserDAO;
 import com.example.todolist.dto.RegisterDTO;
+import com.example.todolist.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,5 +17,12 @@ public class UserService {
 
     public void registerUser(RegisterDTO registerDTO) {
         userDAO.registerUser(registerDTO);
+    }
+
+    public User getByEmail(String email){
+        return userDAO.getByEmail(email);
+    }
+    public User getById(Long id){
+        return userDAO.getById(id);
     }
 }
