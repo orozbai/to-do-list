@@ -13,12 +13,15 @@ import java.util.List;
 public class TaskService {
     @Autowired
     private TaskDAO taskDAO;
-    public String updateTask(Long taskId, String status) {
-        return taskDAO.updateTask(taskId, status);
+
+    public String updateTask(Long taskId, Long currentUserId) {
+        return taskDAO.updateTask(taskId, currentUserId);
     }
-    public Task taskDetailed(Long taskId) {
-        return taskDAO.taskDetailed(taskId);
+
+    public Task taskDetailed(Long taskId, Long currentUserId) {
+        return taskDAO.taskDetailed(taskId, currentUserId).get(0);
     }
+
     public List<TaskListDTO> showTaskList(Long userId) {
         return taskDAO.showTaskList(userId);
     }

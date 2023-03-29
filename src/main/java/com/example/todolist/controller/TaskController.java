@@ -10,6 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Security;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -28,12 +32,14 @@ public class TaskController {
     public TaskCreateDTO createTask(@RequestBody TaskCreateDTO taskCreateDTO) {
         return taskService.createTask(taskCreateDTO, SecurityConfig.getCurrentUserId());
     }
-    @RequestMapping("/{id}")
+
+    @GetMapping("/{id}")
     public Task taskDetails(@PathVariable Long id) {
-        return taskService.taskDetailed(id);
+        return taskService.taskDetailed(id, SecurityConfig.getCurrentUserId());
     }
-    @RequestMapping("/update/{id}")
-    public String createTask(@PathVariable Long id, @RequestParam String status) {
-        return taskService.updateTask(id, status);
+
+    @PostMapping("/update/{id}")
+    public String createTask(@PathVariable Long id) {
+        return taskService.updateTask(id, SecurityConfig.getCurrentUserId());
     }
 }

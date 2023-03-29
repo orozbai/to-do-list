@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.sql.PreparedStatement;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -15,10 +16,20 @@ public class TaskDAO extends BaseDAO {
     public TaskDAO(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         super(jdbcTemplate, namedParameterJdbcTemplate);
     }
-    public Task taskDetailed(Long taskId) {
-        String sql = "SELECT * FROM tasks WHERE id = " + taskId;
-        return jdbcTemplate.queryForObject(sql, Task.class);
+
+    public List<Task> taskDetailed(Long taskId, Long currentUserId) {
+        try {
+            String sql = "SELECT * FROM tasks WHERE id = '" + taskId + "'" +
+                    "AND whosetask = '" + currentUserId + "'";
+            return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Task.class));
+        } catch (Exception e) {
+            List<Task> list = new ArrayList<>();
+            list.add(new Task(666, "problem", e.getMessage(), null, 666, "bad"));
+            return list;
+        }
+
     }
+
     @Override
     public void createTable() {
         jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS tasks (" +
@@ -43,10 +54,31 @@ public class TaskDAO extends BaseDAO {
         String sql = "SELECT * FROM tasks WHERE whoseTask = '" + userId + "'";
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(TaskListDTO.class));
     }
-    public String updateTask(Long taskId, String status) {
-        String sql = "UPDATE tasks SET status = ? WHERE id = ?";
-        jdbcTemplate.update(sql, status, taskId);
-        return "UPDATED";
+
+    public String updateTask(Long taskId, Long currentUserId) {
+        try {
+//            if (taskDetailed(taskId, currentUserId).get(0).getStatus().equals("new")) {
+//                String sql = "UPDATE tasks SET status = ? WHERE id = ? and whosetask = ?";
+//                jdbcTemplate.update(sql, "working", taskId, currentUserId);
+//            } else if (taskDetailed(taskId, currentUserId).get(0).getStatus().equals("working")) {
+//                String sql = "UPDATE tasks SET status = ? WHERE id = ? and whosetask = ?";
+//                jdbcTemplate.update(sql, "end", taskId, currentUserId);
+//            } else {
+//                String sql = "UPDATE tasks SET status = ? WHERE id = ? and whosetask = ?";
+//                jdbcTemplate.update(sql, "end", taskId, currentUserId);
+//            }
+            String sql = "UPDATE tasks SET status = ? WHERE id = ? and whosetask = ?";
+            jdbcTemplate.update(con -> {
+                PreparedStatement ps = con.prepareStatement(sql);
+                ps.setString(1, "working");
+                ps.setLong(2, taskId);
+                ps.setLong(3, currentUserId);
+                return ps;
+            });
+            return "UPDATED";
+        } catch (Exception e) {
+            return "INCORRECT ID TASK";
+        }
     }
 
 
